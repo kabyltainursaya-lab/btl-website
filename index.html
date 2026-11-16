@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>BTL · Between the Lines</title>
+        <link rel="icon" type="image/png" href="images/favicon-3-black-script.png">
+    <link rel="apple-touch-icon" href="images/favicon-3-black-script.png">
+        <link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500&family=Pinyon+Script&family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+                /* Fade-in on scroll */
+        .reveal { opacity:0; transform:translateY(30px); transition:opacity .8s ease, transform .8s ease; }
+        .reveal.visible { opacity:1; transform:none; }
+        @media (prefers-reduced-motion:reduce) { .reveal { opacity:1; transform:none; transition:none; } }
+
+        /* Phone menu */
+        .menu-btn { display:none; width:44px; height:44px; border:1.5px solid var(--ink); border-radius:12px;
+                    background:none; font-size:22px; cursor:pointer; color:var(--ink); }
+        @media (max-width:900px) {
+            .menu-btn { display:block; }
+            .menu.open { display:flex; position:absolute; top:100%; left:0; right:0; flex-direction:column;
+                         align-items:center; gap:18px; padding:24px; background:var(--cream);
+                         border-bottom:1px solid rgba(0,0,0,.1); }
+        }
+        /* Big footer */
+        footer { text-align:left; padding:70px 5% 30px; }
+        .footer-top { display:flex; justify-content:space-between; align-items:flex-end; gap:30px; flex-wrap:wrap;
+                      padding-bottom:40px; border-bottom:1px solid rgba(251,244,234,.2); }
+        .footer-logo { width:56px; height:56px; border-radius:12px; border:1px solid rgba(251,244,234,.3);
+                       display:block; margin-bottom:14px; }
+        .footer-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:30px; padding:40px 0; }
+        .footer-grid h4 { font-family:'Jost',sans-serif; font-size:13px; font-weight:500; letter-spacing:.08em;
+                          text-transform:uppercase; opacity:.6; margin:0 0 14px; }
+        .footer-grid a, .footer-grid p { display:block; color:var(--cream); text-decoration:none; margin:0 0 10px; font-size:15px; }
+        .footer-grid a:hover { color:var(--green); }
+        .footer-bottom { display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px; font-size:13px;
+                         opacity:.6; border-top:1px solid rgba(251,244,234,.2); padding-top:24px; }
+                /* Test yourself */
+        .cta { background:var(--ink); color:var(--cream); border-radius:28px; padding:clamp(36px,6vw,70px);
+               display:flex; align-items:center; justify-content:space-between; gap:40px; flex-wrap:wrap; }
+        .cta h2 { font-size:clamp(32px,4.5vw,54px); margin:0 0 12px; }
+        .cta p { margin:0; max-width:520px; font-size:17px; opacity:.85; }
+        .cta-buttons { display:flex; gap:14px; flex-wrap:wrap; }
+        .cta-btn { padding:14px 32px; border-radius:30px; border:1.5px solid var(--cream); color:var(--cream);
+                   text-decoration:none; font-weight:500; transition:.3s; }
+        .cta-btn.main { background:var(--green); border-color:var(--green); color:var(--ink); }
+        .cta-btn:hover { transform:translateY(-3px); }
+                /* Why listen */
+        .why-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:24px; }
+        .why-item { background:#fff; border:1px solid rgba(0,0,0,.1); border-radius:20px; padding:28px; transition:.3s; }
+        .why-item:hover { border-color:var(--ink); transform:translateY(-4px); }
+        .why-icon { width:56px; height:56px; border-radius:16px; background:var(--pink);
+                    display:flex; align-items:center; justify-content:center; margin-bottom:16px; }
+        .why-item h3 { font-size:21px; margin:0 0 8px; }
+        .why-item p { margin:0; font-size:15px; color:#444; }
+                .logo-img { width:44px; height:44px; border-radius:10px; display:block; }
+             /* Card arrows */
+        .card { position:relative; }
+        .card h3 { padding-right:40px; }
+        .arrow { position:absolute; top:22px; right:22px; width:46px; height:46px; border-radius:50%;
+                 border:1.5px solid var(--ink); display:flex; align-items:center; justify-content:center;
+                 color:var(--ink); text-decoration:none; font-size:20px; transition:.3s; }
+        .arrow:hover { background:var(--green); transform:rotate(-45deg); }   
+             /* Stats */
+        .stats { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); background:var(--ink); color:var(--cream); }
+        .stat { padding:36px 20px; text-align:center; border-right:1px solid rgba(251,244,234,.2); }
+        .stat:last-child { border-right:0; }
+        .stat b { display:block; font-family:'Playfair Display',serif; font-weight:400;
+                  font-size:clamp(38px,5vw,60px); line-height:1.1; color:var(--green); }
+        .stat span { font-size:15px; }
+        @media (max-width:700px) {
+            .stats { grid-template-columns:repeat(2,minmax(0,1fr)); }
+            .stat { border-bottom:1px solid rgba(251,244,234,.2); }
+        }   
+             /* Header */
+        .header { position:sticky; top:0; z-index:20; display:flex; align-items:center;
+                  justify-content:space-between; gap:20px; padding:14px 5%;
+                  background:rgba(251,244,234,.92); backdrop-filter:blur(10px);
+                  border-bottom:1px solid rgba(0,0,0,.08); }
+        .logo { display:flex; align-items:center; gap:10px; text-decoration:none; color:var(--ink);
+                font-family:'Playfair Display',serif; font-size:28px; font-weight:600; }
+        .logo span { font-family:'Jost',sans-serif; font-size:12px; font-weight:400;
+                     line-height:1.2; max-width:70px; }
+        .menu { position:static; padding:0; background:none; border:0; }
+        .header-right { display:flex; align-items:center; gap:14px; }
+        .icon { display:flex; color:var(--ink); }
+        .icon:hover { color:#9a6b5e; }
+        .header-btn { padding:10px 26px; background:var(--green); border:1.5px solid var(--ink);
+                      border-radius:30px; color:var(--ink); text-decoration:none; transition:.3s; }
+        .header-btn:hover { transform:translateY(-2px); box-shadow:0 8px 16px rgba(0,0,0,.12); }
+        @media (max-width:900px) { .menu { display:none; } }   
+                /* Authors */
+        #authors { background:var(--green); text-align:center; }
+        .authors { display:flex; justify-content:center; gap:80px; flex-wrap:wrap; margin:40px 0; }
+        .author img { width:240px; height:300px; object-fit:cover; border-radius:50%;
+                      border:10px solid var(--cream); background:var(--cream); }
+        .author h3 { font-size:30px; margin:16px 0 0; }
+        .author p { margin:4px 0 0; font-size:15px; }
+        .together { max-width:800px; margin:0 auto; background:var(--cream); padding:24px 36px;
+                    border-radius:6px; font-size:18px; }
+
+        /* Footer */
+        footer { background:var(--ink); color:var(--cream); text-align:center; padding:70px 8%; }
+        .footer-title { font-family:'Pinyon Script',cursive; font-size:clamp(48px,7vw,90px); margin:0; line-height:1.2; }
+        .follow { display:inline-block; margin:20px 0; padding:12px 36px; border:1.5px solid var(--cream);
+                  border-radius:30px; color:var(--cream); text-decoration:none; transition:.3s; }
+        .follow:hover { background:var(--cream); color:var(--ink); }
+        .credits { font-size:14px; opacity:.7; margin:20px 0 0; }
+        :root { --pink:#DBB8B2; --cream:#FBF4EA; --green:#C3C985; --ink:#1a1a1a; }
+        * { box-sizing:border-box; }
+        html { scroll-behavior:smooth; }
+        body { margin:0; font-family:'Jost',sans-serif; background:var(--cream); color:var(--ink); line-height:1.6; }
+        h1, h2, h3 { font-family:'Playfair Display',serif; font-weight:400; line-height:1.1; }
+
+        /* Menu that stays on top */
+        nav { position:sticky; top:0; z-index:10; display:flex; justify-content:center; gap:32px;
+              padding:18px; background:rgba(251,244,234,.92); border-bottom:1px solid rgba(0,0,0,.08); }
+        nav a { color:var(--ink); text-decoration:none; font-size:15px; }
+        nav a:hover { color:#9a6b5e; }
+
+        section { padding:80px 8%; }
+
+        /* Hero */
+        #home { background:var(--pink); display:flex; align-items:center; justify-content:space-between;
+                gap:40px; min-height:90vh; padding-bottom:0; }
+        #home h1 { font-size:clamp(48px,8vw,110px); margin:0; }
+        .tagline { margin:10px 0 0; line-height:1; }
+        .script { font-family:'Pinyon Script',cursive; font-size:clamp(40px,6vw,80px); }
+        .light { font-family:'Playfair Display',serif; color:var(--cream); font-size:clamp(44px,7vw,96px); }
+        .button { display:inline-block; margin-top:40px; padding:14px 60px; background:var(--green);
+                  border:1.5px solid var(--ink); border-radius:40px; color:var(--ink); text-decoration:none; transition:.3s; }
+        .button:hover { transform:translateY(-3px); box-shadow:0 10px 20px rgba(0,0,0,.15); }
+        .hero-img { width:45%; align-self:flex-end; }
+        .hero-img img { width:100%; display:block; }
+
+        /* Phones */
+        @media (max-width:700px) {
+            #home { flex-direction:column; text-align:center; }
+            .hero-img { width:85%; }
+            nav { gap:14px; flex-wrap:wrap; }
+        }
+                /* About */
+        #about { display:flex; align-items:center; gap:60px; }
+        .about-text { flex:1; }
+        .small { font-size:18px; margin:0 0 20px; }
+        .about-text h2 { font-size:clamp(32px,4.5vw,58px); margin:0; }
+        .about-img { flex:1; max-width:520px; padding:20px; background:var(--cream);
+                     border:1.5px solid var(--ink); box-shadow:28px 0 0 var(--green); }
+        .about-img img { width:100%; display:block; }
+               @media (max-width:700px) {
+            #about { flex-direction:column; }
+        }
+            /* Episodes */
+        .section-title { font-size:clamp(36px,5vw,64px); margin:0 0 10px; }
+        .section-intro { max-width:620px; margin:0 0 50px; font-size:18px; }
+        .cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:30px; }
+        .card { background:#fff; border:1.5px solid var(--ink); border-radius:20px; padding:24px; transition:.3s; }
+        .card:hover { transform:translateY(-8px); box-shadow:0 20px 40px rgba(0,0,0,.12); }
+        .tag { display:inline-block; background:var(--pink); padding:4px 14px; border-radius:20px; font-size:13px; }
+        .card h3 { font-size:24px; margin:14px 0 6px; }
+        .book { font-style:italic; color:#555; margin:0 0 16px; }
+        .video { aspect-ratio:16/9; background:var(--green); border-radius:12px; margin-bottom:16px;
+                 display:flex; align-items:center; justify-content:center; }
+        details { border-top:1px solid rgba(0,0,0,.15); padding:10px 0; }
+        summary { cursor:pointer; font-weight:500; }
+        .soon { opacity:.6; }
+        /* Method */
+        #method { background:var(--pink); }
+        .steps { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:20px; margin-bottom:70px; }
+        .step { background:var(--cream); border:1.5px solid var(--ink); border-radius:20px; padding:24px; }
+        .num { width:44px; height:44px; border-radius:50%; background:var(--green); border:1.5px solid var(--ink);
+               display:flex; align-items:center; justify-content:center;
+               font-family:'Playfair Display',serif; font-size:20px; margin-bottom:12px; }
+        .step h3 { font-size:20px; margin:0 0 8px; }
+        .step p { margin:0; font-size:15px; }
+        .cis-title { text-align:center; font-size:clamp(28px,3.5vw,40px); margin:0 0 30px; }
+        .cis { display:flex; justify-content:center; flex-wrap:wrap; }
+        .circle { width:230px; height:230px; border-radius:50%; border:1.5px solid var(--ink); margin:0 -12px;
+                  display:flex; flex-direction:column; align-items:center; justify-content:center;
+                  text-align:center; padding:28px; }
+        .circle h3 { font-size:22px; margin:0 0 6px; }
+        .circle p { font-size:14px; margin:0; }
+        .c1 { background:var(--cream); }
+        .c2 { background:var(--green); }
+        .c3 { background:var(--ink); color:var(--cream); }
+        @media (max-width:700px) { .circle { margin:-10px 0; } }
+    </style>
+
+</head>
+<body>
+
+           <header class="header">
+                        <a href="#home" class="logo">BTL<span>Between the Lines</span></a>
+
+        <nav class="menu">
+            <a href="#about">About</a>
+            <a href="#episodes">Episodes</a>
+            <a href="#method">Our Method</a>
+            <a href="#authors">Authors</a>
+        </nav>
+
+        <div class="header-right">
+            <a href="#" class="icon" aria-label="YouTube">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="5" width="20" height="14" rx="4"/><path d="M10 9l5 3-5 3z" fill="currentColor"/></svg>
+            </a>
+            <a href="#" class="icon" aria-label="Instagram">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>
+            </a>
+                        <button class="menu-btn" aria-label="Open menu">☰</button>
+            <a href="#episodes" class="header-btn">Listen</a>
+        </div>
+    </header>
+
+        <section id="home">
+        <div class="hero-text">
+            <h1>Between<br>the Lines</h1>
+            <p class="tagline">
+                <span class="script">where</span>
+                <span class="light">Story<br>meets Science</span>
+            </p>
+            <a class="button" href="#episodes">LISTEN NOW</a>
+        </div>
+        <div class="hero-img">
+            <img src="images/mary-shelley.jpg" alt="Portrait of Mary Shelley">
+        </div>
+    </section>
+    <div class="stats">
+        <div class="stat"><b>5</b><span>episodes</span></div>
+        <div class="stat"><b>3</b><span>subjects: science, math &amp; history</span></div>
+        <div class="stat"><b>5</b><span>research steps per episode</span></div>
+        <div class="stat"><b>100%</b><span>free for students</span></div>
+    </div>
+        <section id="about">
+        <div class="about-text">
+            <p class="small">A story-first approach to science, math &amp; history</p>
+            <h2>Step inside a scene from literature — and discover the real idea hiding behind it</h2>
+        </div>
+        <div class="about-img">
+            <img src="images/book.jpg" alt="An open book in warm light">
+        </div>
+    </section>
+        <p>A story-first approach to science, math &amp; history</p>
+        <h2>Step inside a scene from literature — and discover the real idea hiding behind it</h2>
+    </section>
+
+       <section id="episodes">
+        <h2 class="section-title">Episodes</h2>
+        <p class="section-intro">Each episode opens with one scene from a classic book, explains the real science or history hidden inside it, and finds the same idea in today's world.</p>
+
+        <div class="cards">
+
+            <div class="card">
+                                <a href="#" class="arrow" aria-label="Watch episode">→</a>
+                <span class="tag">History of Science</span>
+                <h3>What did science actually believe was possible in 1818?</h3>
+                <p class="book">Frankenstein · Mary Shelley</p>
+                <div class="video">Video coming soon</div>
+                <details>
+                    <summary>Show notes</summary>
+                    <p><b>The concept:</b> Galvanism, early experiments that used electricity to make the muscles of dead animals move.</p>
+                    <p><b>Literary technique:</b> Write here.</p>
+                    <p><b>Modern echo:</b> Write here.</p>
+                    <p><b>Synthesis:</b> Write here.</p>
+                    <p><b>Sources:</b> Write here.</p>
+                </details>
+                <details>
+                    <summary>Transcript</summary>
+                    <p>The transcript will be added after recording.</p>
+                </details>
+            </div>
+
+            <div class="card">
+                               <a href="#" class="arrow" aria-label="Watch episode">→</a> 
+                <span class="tag">Neuroscience</span>
+                <h3>Can a mind really rewire itself overnight?</h3>
+                <p class="book">Flowers for Algernon · Daniel Keyes</p>
+                <div class="video">Video coming soon</div>
+                <details>
+                    <summary>Show notes</summary>
+                    <p><b>The concept:</b> Write here.</p>
+                    <p><b>Literary technique:</b> Write here.</p>
+                    <p><b>Modern echo:</b> Write here.</p>
+                    <p><b>Synthesis:</b> Write here.</p>
+                    <p><b>Sources:</b> Write here.</p>
+                </details>
+                <details>
+                    <summary>Transcript</summary>
+                    <p>The transcript will be added after recording.</p>
+                </details>
+            </div>
+
+            <div class="card soon">
+                <span class="tag">Coming soon</span>
+                <h3>Episode 3</h3>
+                <p class="book">Book to be announced</p>
+            </div>
+
+            <div class="card soon">
+                <span class="tag">Coming soon</span>
+                <h3>Episode 4</h3>
+                <p class="book">Book to be announced</p>
+            </div>
+
+            <div class="card soon">
+                <span class="tag">Coming soon</span>
+                <h3>Episode 5</h3>
+                <p class="book">Book to be announced</p>
+            </div>
+
+        </div>
+    </section>
+    <section id="why">
+        <h2 class="section-title">Why listen?</h2>
+        <p class="section-intro">A podcast made by students, for students: short, clear and backed by real sources.</p>
+
+        <div class="why-grid">
+            <div class="why-item">
+                <div class="why-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
+                <h3>Short and clear</h3>
+                <p>Each episode takes about ten minutes, perfect for a break or the bus ride home.</p>
+            </div>
+            <div class="why-item">
+                <div class="why-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="12" r="6"/><circle cx="15" cy="12" r="6"/></svg></div>
+                <h3>Two subjects at once</h3>
+                <p>Learn literature and science or history together, and see how they connect.</p>
+            </div>
+            <div class="why-item">
+                <div class="why-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></div>
+                <h3>Full transcripts</h3>
+                <p>Read along with every episode to follow easily and build your English vocabulary.</p>
+            </div>
+            <div class="why-item">
+                <div class="why-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M4 4h6a2 2 0 0 1 2 2v14a2 2 0 0 0-2-2H4z"/><path d="M20 4h-6a2 2 0 0 0-2 2v14a2 2 0 0 1 2-2h6z"/></svg></div>
+                <h3>Real sources</h3>
+                <p>Every idea is checked against academic research, listed in the show notes.</p>
+            </div>
+            <div class="why-item">
+                <div class="why-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-4 10.5c.6.6 1 1.4 1 2.5h6c0-1.1.4-1.9 1-2.5A6 6 0 0 0 12 3z"/></svg></div>
+                <h3>Fresh ideas</h3>
+                <p>Get new angles for literature essays, class discussions and projects.</p>
+            </div>
+            <div class="why-item">
+                <div class="why-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></svg></div>
+                <h3>Free, anytime</h3>
+                <p>Watch on your phone or laptop, whenever you want, at no cost.</p>
+            </div>
+        </div>
+    </section>
+        <section id="method">
+        <h2 class="section-title">Our Method</h2>
+        <p class="section-intro">Every episode follows the same five research steps, so each connection is checked, not guessed.</p>
+
+        <div class="steps">
+            <div class="step">
+                <div class="num">1</div>
+                <h3>Select the scene</h3>
+                <p>Choose a passage from a classic English or American text that points to something outside literature.</p>
+            </div>
+            <div class="step">
+                <div class="num">2</div>
+                <h3>Research the concept</h3>
+                <p>Investigate the real science, math or history behind the scene using credible sources.</p>
+            </div>
+            <div class="step">
+                <div class="num">3</div>
+                <h3>Check the scholarship</h3>
+                <p>Read what literary critics and the author's own writing say, so the analysis stays grounded.</p>
+            </div>
+            <div class="step">
+                <div class="num">4</div>
+                <h3>Find the modern echo</h3>
+                <p>Look for the same pattern in pop culture or a non-English literary tradition.</p>
+            </div>
+            <div class="step">
+                <div class="num">5</div>
+                <h3>Write the synthesis</h3>
+                <p>Explain how the scene, the concept and the echo all reflect one underlying pattern.</p>
+            </div>
+        </div>
+
+        <h3 class="cis-title">How we check each episode</h3>
+        <div class="cis">
+            <div class="circle c1">
+                <h3>Comprehension</h3>
+                <p>Both the book and the science are explained accurately.</p>
+            </div>
+            <div class="circle c2">
+                <h3>Integration</h3>
+                <p>The connection between them is real, not random.</p>
+            </div>
+            <div class="circle c3">
+                <h3>Synthesis</h3>
+                <p>Together they reveal a new idea neither shows alone.</p>
+            </div>
+        </div>
+    </section>
+
+        <section id="quiz">
+        <div class="cta">
+            <div>
+                <h2>Test yourself</h2>
+                <p>Take a 2-minute quiz before you watch, then again after. See how much you learned, and help our research.</p>
+            </div>
+            <div class="cta-buttons">
+                <a class="cta-btn main" href="#">Before watching</a>
+                <a class="cta-btn" href="#">After watching</a>
+            </div>
+        </div>
+    </section>
+    <section id="authors">
+        <h2>Meet the Authors</h2>
+    </section>
+
+            <footer>
+        <div class="footer-top">
+            <div>
+                <img src="images/favicon-3-black-script.png" alt="BTL logo" class="footer-logo">
+                <p class="footer-title">Let's read and talk</p>
+            </div>
+            <a class="follow" href="#episodes">START LISTENING</a>
+        </div>
+
+        <div class="footer-grid">
+            <div>
+                <h4>Explore</h4>
+                <a href="#about">About</a>
+                <a href="#episodes">Episodes</a>
+                <a href="#why">Why listen</a>
+                <a href="#method">Our Method</a>
+                <a href="#authors">Authors</a>
+            </div>
+            <div>
+                <h4>Follow</h4>
+                <a href="#">YouTube</a>
+                <a href="#">Instagram</a>
+            </div>
+            <div>
+                <h4>Contact</h4>
+                <p>Nurorda Almaty</p>
+                <a href="mailto:uaisnurai@gmail.com">uaisnurai@gmail.com</a>
+                <a href="mailto:kabyltainursaya@gmail.com">kabyltainursaya@gmail.com</a>
+            </div>
+            <div>
+                <h4>Project</h4>
+                <p>Student research project, 2026</p>
+                <p>Linguistics (English Language)</p>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <span>© 2026 Between the Lines</span>
+            <span>Made by Kabyltay Nursaya &amp; Uais Nuray</span>
+        </div>
+    </footer>
+        <script>
+        // 1. Fade-in: find all sections (except the hero) and the stats strip
+        const items = document.querySelectorAll('section:not(#home), .stats');
+        items.forEach(el => el.classList.add('reveal'));
+
+        // Watch the screen: when a section comes into view, make it visible
+        const watcher = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    watcher.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+        items.forEach(el => watcher.observe(el));
+
+        // 2. Phone menu: clicking ☰ opens or closes the menu
+        const btn = document.querySelector('.menu-btn');
+        const menu = document.querySelector('.menu');
+        btn.addEventListener('click', () => menu.classList.toggle('open'));
+        menu.querySelectorAll('a').forEach(a =>
+            a.addEventListener('click', () => menu.classList.remove('open'))
+        );
+    </script>
+</body>
+</html>
